@@ -6,12 +6,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/admin")
+@RequestMapping("/admin") // memberikan batasan hanya untuk admin, jadi yg bisa akses route di bawah hanya admin
 public class HelloWorldController {
 	
 	@GetMapping("/hello")
 	public String helloWorld() {
-		return "Haii halo halo hai sil"; //respons 
+		return "Haii halo halo"; //respons 
 	}
 	
 	@GetMapping("/hello/{name}") 
