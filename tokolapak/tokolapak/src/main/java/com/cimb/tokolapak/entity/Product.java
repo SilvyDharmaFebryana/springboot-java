@@ -1,13 +1,16 @@
 package com.cimb.tokolapak.entity;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Table;
+// import javax.persistence.Table;
 
 @Entity
-// @Table(name = "produca") // Customize table name
+// @Table(name = "produk") // Customize table name
 public class Product {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // agar column id auto increment dgn otomatis
     private int id;
     private String productName;
     private double price;
