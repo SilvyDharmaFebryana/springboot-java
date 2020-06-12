@@ -1,0 +1,9 @@
+package com.cimb.tokolapak.dao;
+
+import com.cimb.tokolapak.entity.Employee;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface EmployeeRepo extends JpaRepository<Employee, Integer> {
+    
+}
