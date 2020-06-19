@@ -1,7 +1,7 @@
 package com.cimb.tokolapak.service.impl;
 
 import com.cimb.tokolapak.dao.EmployeeAddressRepo;
-import com.cimb.tokolapak.dao.EmployeeRepo;
+// import com.cimb.tokolapak.dao.EmployeeRepo;
 import com.cimb.tokolapak.entity.EmployeeAddress;
 import com.cimb.tokolapak.service.EmployeeService;
 
@@ -11,8 +11,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
 
-    @Autowired
-    private EmployeeRepo employeeRepo;
+    // @Autowired
+    // private EmployeeRepo employeeRepo;
 
     @Autowired
     private EmployeeAddressRepo employeeAddressRepo;
@@ -24,5 +24,6 @@ public class EmployeeServiceImpl implements EmployeeService {
 		
 		employeeAddressRepo.delete(employeeAddress);
     }
+
     
 }
