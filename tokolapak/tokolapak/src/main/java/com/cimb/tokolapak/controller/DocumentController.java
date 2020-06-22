@@ -1,5 +1,6 @@
 package com.cimb.tokolapak.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
@@ -24,7 +25,14 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.Date;
 
-// import com.cimb.tokolapak.dao.UserRepo;
+import com.cimb.tokolapak.entity.User;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import com.cimb.tokolapak.dao.UserRepo;
+import org.springframework.web.bind.annotation.RequestBody;
+
 
 @RestController
 @RequestMapping("/documents")
@@ -33,15 +41,22 @@ public class DocumentController {
 
 	private String uploadPath = System.getProperty("user.dir") + "\\tokolapak\\tokolapak\\src\\main\\resources\\static\\images\\";
 
+    @Autowired
+    private UserRepo userRepo;
+
+
     @GetMapping("/testing")
     public void testing() {
         System.out.println(uploadPath);
     }
     
     @PostMapping
-    public String uploadFile(@RequestParam("file") MultipartFile file) {
+    public String uploadFile(@RequestParam("file") MultipartFile file, @RequestParam("userData") String userString) throws JsonMappingException, JsonProcessingException {
 
         Date date = new Date();
+
+        User user = new ObjectMapper().readValue(userString, User.class);
+        System.out.println("username: " + user.getUsername());
 
         String fileExtension = file.getContentType().split("/")[1];
         String newFileName = "IMG-" + date.getTime() + "." + fileExtension;
@@ -61,13 +76,11 @@ public class DocumentController {
         String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/documents/download/")
                 .path(fileName).toUriString();
 
+        user.setProfilePicture(fileDownloadUri);
+        userRepo.save(user);
+
         return fileDownloadUri;
     }
-
-
-    
-
-
 
     @GetMapping("/download/{fileName:.+}")
     public ResponseEntity<Object> downloadFile(@PathVariable String fileName) {
@@ -82,6 +95,11 @@ public class DocumentController {
         }
 
         return ResponseEntity.ok().contentType(MediaType.parseMediaType("application/octet-stream")).header(HttpHeaders.CONTENT_DISPOSITION, "attachment; fileName=\"" + resource.getFilename() + "\"").body(resource);
+    }
+
+    @PostMapping("/login")
+    public User loginWithProfilePic(@RequestBody User user) {
+        return userRepo.findByUsername(user.getUsername()).get();
     }
     
 }

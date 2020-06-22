@@ -12,6 +12,7 @@ import com.cimb.tokolapak.entity.EmployeeAddress;
 import com.cimb.tokolapak.entity.Project;
 // import com.cimb.tokolapak.service.DepartmentService;
 import com.cimb.tokolapak.service.EmployeeService;
+import com.cimb.tokolapak.util.EmailUtil;
 
 import org.springframework.beans.factory.annotation.Autowired;
 // import org.springframework.web.bind.annotation.CrossOrigin;
@@ -45,8 +46,12 @@ public class EmployeeController {
     @Autowired
     private ProjectRepo projectRepo;
 
+    @Autowired
+    private EmailUtil emailUtil;
+
     @PostMapping("/")
     public Employee addEmployee(@RequestBody Employee employee) {
+        emailUtil.sendEmail(employee.getEmail(), "Registrasi Karyawan", "<h1> Selamat ! </h1> \n anda telah bergabung");
         return employeeRepo.save(employee);
     }
 
