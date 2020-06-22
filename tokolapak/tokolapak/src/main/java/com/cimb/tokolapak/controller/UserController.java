@@ -68,7 +68,7 @@ public class UserController {
         String url = "http://localhost:8080/users/verifiedMail?username=" + user.getUsername();
         
         emailUtil.sendEmail(user.getEmail(), "Regis Akun Sukses",
-                "<h1> Sukses Buat Akun ! </h1> \n mohon klik <a href=\"http://localhost:8080/users/verifiedMail?username=" + user.getUsername() + "\">link</a>");
+                "<h1> Sukses Buat Akun ! </h1> \n mohon klik <a href=\"http://localhost:8080/users/verifiedMail?username=" + user.getUsername() + "\">link</a> untuk memverifikasi akun anda");
         
         User savedUser = userRepo.save(user);
         savedUser.setPassword(null);
