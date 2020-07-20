@@ -22,11 +22,16 @@ public class Project {
     private int id;
     private String name;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST,
-        CascadeType.REFRESH })
+    // @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.DETACH, CascadeType.PERSIST,
+    //     CascadeType.REFRESH })
+    // @JoinTable(name = "project_employee", joinColumns = @JoinColumn(name = "project_id"), inverseJoinColumns = @JoinColumn(name = "employee_id"))
+    // @JsonIgnore
+    // private List<Employee> employees;
+
+    @ManyToMany(fetch = FetchType.EAGER, cascade = { CascadeType.DETACH, CascadeType.PERSIST, CascadeType.REFRESH })
     @JoinTable(name = "project_employee", joinColumns = @JoinColumn(name = "project_id"), inverseJoinColumns = @JoinColumn(name = "employee_id"))
     @JsonIgnore
-    private List<Employee> employees;
+	private List<Employee> employees;
 
     public int getId() {
         return id;

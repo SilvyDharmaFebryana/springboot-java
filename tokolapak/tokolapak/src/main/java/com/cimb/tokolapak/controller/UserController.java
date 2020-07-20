@@ -2,8 +2,6 @@ package com.cimb.tokolapak.controller;
 
 import java.util.Optional;
 
-// import java.util.Optional;
-
 import com.cimb.tokolapak.dao.UserRepo;
 import com.cimb.tokolapak.entity.User;
 import com.cimb.tokolapak.util.EmailUtil;
@@ -36,23 +34,27 @@ public class UserController {
     private EmailUtil emailUtil;
 
   
-    // @GetMapping("/{username}")
-    // public Optional<User> getUsername(@PathVariable String username) {
-    //     return userRepo.findByUsername(username);
-    // }
+    @GetMapping("/{username}")
+    public Optional<User> getUsername(@PathVariable String username) {
+        return userRepo.findByUsername(username);
+    }
 
     
-    @GetMapping("/verifiedMail")
-    public String verifiedMail(@RequestParam String username) {
+    @GetMapping("/verifiedMail/{username}")
+    public String verifiedMail(@PathVariable String username,  @RequestParam String token) {
 
         User findUser = userRepo.findByUsername(username).get();
 
-        findUser.setVerified(true);
+        if (findUser.getPassword().equals(token)) {
+            findUser.setVerified(true);
+        } else {
+            throw new RuntimeException("token is invalid");
+        }
         userRepo.save(findUser);
-
-        return "terverifikasi";
+        return "<h1> <center> Dear " + findUser.getUsername() + ", Akun anda telah terverifikasi </center> </h1>";
     }
 
+    
     @PostMapping
     public User registeUser(@RequestBody User user) {
         // Optional<User> findUser = userRepo.findByUsername(user.getUsername());
@@ -64,10 +66,8 @@ public class UserController {
         String encodedPassword = pwEncoder.encode(user.getPassword());
 
         user.setPassword(encodedPassword);
-
-        String url = "http://localhost:8080/users/verifiedMail?username=" + user.getUsername();
         
-        emailUtil.sendEmail(user.getEmail(), "Regis Akun Sukses",
+        emailUtil.sendEmail(user.getEmail(), "Registrasi Akun Sukses",
                 "<h1> Sukses Buat Akun ! </h1> \n mohon klik <a href=\"http://localhost:8080/users/verifiedMail?username=" + user.getUsername() + "\">link</a> untuk memverifikasi akun anda");
         
         User savedUser = userRepo.save(user);
@@ -77,6 +77,7 @@ public class UserController {
 
     //    "<a href=\"" + l + "\">" + l + "</a>\n"
     }
+
     
 
     @PostMapping("/login")

@@ -98,6 +98,7 @@ public class EmployeeController {
         if (findDepartment ==  null) 
             throw new RuntimeException("Department not found");
 
+        employee.setDepartment(findDepartment);
         return employeeRepo.save(employee);
     }
     

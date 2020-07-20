@@ -23,6 +23,8 @@ public class User {
 
 	private boolean isVerified;
 
+	// private String 
+
 	public int getId() {
 		return id;
 	}

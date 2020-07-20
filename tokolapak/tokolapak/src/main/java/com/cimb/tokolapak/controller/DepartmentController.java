@@ -47,7 +47,8 @@ public class DepartmentController {
             employeeRepo.save(employee);
         });
 
-        // departmentRepo.deleteById(id);
+        findDepartment.setEmployees(null);
 
+        departmentRepo.deleteById(departmentId);
     }
 }
